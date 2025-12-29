@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FF PRO MAX | Ultimate Arena</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Space+Grotesk:wght@300;500;700&display=swap');
+        
+        :root {
+            --glow-green: #00ff88;
+            --cyber-black: #020617;
+        }
+
+        body {
+            background-color: var(--cyber-black);
+            color: #ffffff;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 50% -10%, rgba(0, 255, 136, 0.12) 0%, transparent 50%),
+                radial-gradient(circle at 0% 100%, rgba(0, 255, 136, 0.05) 0%, transparent 40%);
+        }
+
+        .glass {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+        }
+
+        .btn-action {
+            background: linear-gradient(135deg, #00ff88 0%, #00bd65 100%);
+            color: #000;
+            font-weight: 800;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 5px 20px rgba(0, 255, 136, 0.2);
+        }
+
+        .btn-action:active { transform: scale(0.96); }
+
+        .section-view { display: none; }
+        .section-view.active { display: block; animation: slideUp 0.4s ease-out; }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .nav-btn.active { color: var(--glow-green); }
+
+        input, select {
+            background: rgba(255, 255, 255, 0.03) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            color: white !important;
+            border-radius: 16px !important;
+            padding: 16px !important;
+            outline: none;
+        }
+
+        input:focus { border-color: var(--glow-green) !important; }
+
+        #toast {
+            position: fixed;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="toast" class="glass px-6 py-3 border-l-4 border-[#00ff88] text-xs font-black uppercase tracking-widest shadow-2xl"></div>
+
+    <!-- Header -->
+    <header class="p-6 flex justify-between items-center sticky top-0 z-50 backdrop-blur-xl border-b border-white/5">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 glass flex items-center justify-center border-[#00ff88]/20">
+                <i data-lucide="zap" class="text-[#00ff88] w-6 h-6"></i>
+            </div>
+            <div>
+                <h1 style="font-family: 'Space Grotesk', sans-serif;" class="text-xl font-bold tracking-tighter uppercase leading-none">FFPRO<span class="text-[#00ff88]">MAX</span></h1>
+                <p class="text-[8px] text-gray-500 font-black tracking-[4px] uppercase">Elite Arena</p>
+            </div>
+        </div>
+        <button onclick="toggleGate()" class="p-2 text-gray-400 hover:text-[#00ff88] transition-colors"><i data-lucide="lock" class="w-5 h-5"></i></button>
+    </header>
+
+    <main class="p-6 pb-32 max-w-xl mx-auto">
+        
+        <!-- ARENA VIEW -->
+        <section id="view-home" class="section-view active">
+            <div class="mb-8">
+                <h2 class="text-3xl font-black italic uppercase tracking-tighter">Live <span class="text-[#00ff88]">Battles</span></h2>
+                <div class="h-1 w-12 bg-[#00ff88] mt-1 rounded-full"></div>
+            </div>
+            <div id="match-list" class="space-y-6"></div>
+        </section>
+
+        <!-- RULES VIEW -->
+        <section id="view-rules" class="section-view">
+            <h2 class="text-2xl font-black mb-6 uppercase italic">Guidelines</h2>
+            <div class="glass p-6 space-y-4">
+                <div class="flex gap-4"><i data-lucide="shield-check" class="text-[#00ff88] w-5 h-5"></i><p class="text-sm text-gray-400">Mobile players only. Emulators will be banned.</p></div>
+                <div class="flex gap-4"><i data-lucide="shield-check" class="text-[#00ff88] w-5 h-5"></i><p class="text-sm text-gray-400">Send Payment Screenshot to WhatsApp after registration.</p></div>
+                <div class="flex gap-4"><i data-lucide="shield-check" class="text-[#00ff88] w-5 h-5"></i><p class="text-sm text-gray-400">Join room 10 minutes before the start time.</p></div>
+            </div>
+        </section>
+
+        <!-- SUPPORT VIEW -->
+        <section id="view-help" class="section-view">
+            <h2 class="text-2xl font-black mb-6 uppercase italic tracking-tighter text-[#00ff88]">Support Center</h2>
+            <div class="space-y-4">
+                <a href="https://wa.me/8920334914" class="glass p-5 flex justify-between items-center group">
+                    <div class="flex items-center gap-4">
+                        <i data-lucide="message-square" class="text-green-500 w-6 h-6"></i>
+                        <p class="font-bold">WhatsApp Support</p>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-gray-600 group-hover:text-white"></i>
+                </a>
+                <a href="https://instagram.com/urfav_priram" class="glass p-5 flex justify-between items-center group">
+                    <div class="flex items-center gap-4">
+                        <i data-lucide="instagram" class="text-pink-500 w-6 h-6"></i>
+                        <p class="font-bold">Instagram</p>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-gray-600 group-hover:text-white"></i>
+                </a>
+                <a href="mailto:rajp051818@gmail.com" class="glass p-5 flex justify-between items-center group">
+                    <div class="flex items-center gap-4">
+                        <i data-lucide="mail" class="text-blue-500 w-6 h-6"></i>
+                        <p class="font-bold">Admin Email</p>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-gray-600 group-hover:text-white"></i>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Navigation -->
+    <nav class="fixed bottom-6 left-6 right-6 glass p-4 flex justify-around items-center z-40 border-white/10 shadow-2xl">
+        <button onclick="nav('home')" id="n-home" class="nav-btn active flex flex-col items-center gap-1">
+            <i data-lucide="layout-grid" class="w-5 h-5"></i>
+            <span class="text-[8px] font-black uppercase">Arena</span>
+        </button>
+        <button onclick="nav('rules')" id="n-rules" class="nav-btn flex flex-col items-center gap-1">
+            <i data-lucide="scroll-text" class="w-5 h-5"></i>
+            <span class="text-[8px] font-black uppercase">Rules</span>
+        </button>
+        <button onclick="nav('help')" id="n-help" class="nav-btn flex flex-col items-center gap-1">
+            <i data-lucide="headphones" class="w-5 h-5"></i>
+            <span class="text-[8px] font-black uppercase">Support</span>
+        </button>
+    </nav>
+
+    <!-- ADMIN GATE -->
+    <div id="gate-overlay" class="fixed inset-0 z-[100] hidden bg-black/95 backdrop-blur-3xl flex items-center justify-center p-8">
+        <div class="w-full max-w-sm space-y-6">
+            <div id="gate-s1" class="text-center">
+                <h3 class="text-xl font-black uppercase mb-8 italic">Admin <span class="text-[#00ff88]">Security</span></h3>
+                <div class="relative mb-6">
+                    <input type="password" id="s-key" placeholder="SECRET KEY" class="w-full text-center tracking-[8px]">
+                    <button onclick="toggleHide('s-key')" class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500"><i data-lucide="eye" class="w-4 h-4"></i></button>
+                </div>
+                <button onclick="checkSecret()" class="btn-action w-full py-4 rounded-2xl uppercase text-xs">Unlock</button>
+            </div>
+
+            <div id="gate-s2" class="hidden space-y-4">
+                <input type="email" id="adm-email" placeholder="EMAIL" class="w-full">
+                <div class="relative">
+                    <input type="password" id="adm-pass" placeholder="PASSWORD" class="w-full">
+                    <button onclick="toggleHide('adm-pass')" class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500"><i data-lucide="eye" class="w-4 h-4"></i></button>
+                </div>
+                <button onclick="checkLogin()" class="btn-action w-full py-4 rounded-2xl uppercase text-xs">Verify</button>
+                <button onclick="gateS(3)" class="text-red-500 text-[9px] font-black block mx-auto uppercase underline">Reset System</button>
+            </div>
+
+            <div id="gate-s3" class="hidden space-y-4 text-center">
+                <h4 class="text-red-500 font-black uppercase">Emergency Wipe</h4>
+                <input type="password" id="master-code" placeholder="MASTER CODE" class="w-full text-center">
+                <button onclick="masterReset()" class="bg-red-600 text-white w-full py-4 rounded-2xl uppercase text-xs font-bold">Wipe Data</button>
+            </div>
+            
+            <button onclick="toggleGate()" class="text-gray-600 text-[10px] font-bold block mx-auto uppercase tracking-widest">Close</button>
+        </div>
+    </div>
+
+    <!-- ADMIN DASHBOARD -->
+    <div id="admin-panel" class="fixed inset-0 z-[200] hidden bg-[#020617] overflow-y-auto p-6">
+        <div class="flex justify-between items-center mb-8">
+            <h3 class="text-xl font-black italic uppercase"><span class="text-[#00ff88]">Control</span> Hub</h3>
+            <button onclick="closeAdmin()" class="bg-white/5 p-3 rounded-xl"><i data-lucide="x" class="w-5 h-5"></i></button>
+        </div>
+
+        <div class="flex bg-white/5 p-1 rounded-2xl mb-8 border border-white/5">
+            <button onclick="setTab('create')" id="bt-create" class="flex-1 py-4 text-[10px] font-black rounded-xl bg-[#00ff88] text-black uppercase">Create</button>
+            <button onclick="setTab('live')" id="bt-live" class="flex-1 py-4 text-[10px] font-black rounded-xl uppercase">Matches</button>
+            <button onclick="setTab('core')" id="bt-core" class="flex-1 py-4 text-[10px] font-black rounded-xl uppercase">Security</button>
+        </div>
+
+        <!-- CREATE -->
+        <div id="tab-create" class="space-y-4">
+            <div class="glass p-6 space-y-4">
+                <input type="text" id="m-name" placeholder="MATCH NAME" class="w-full">
+                <div class="grid grid-cols-2 gap-4">
+                    <select id="m-map" class="w-full"><option>Bermuda</option><option>Purgatory</option><option>Alpine</option></select>
+                    <select id="m-mode" class="w-full"><option>SOLO</option><option>DUO</option><option>SQUAD</option></select>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <input type="text" id="m-prize" placeholder="PRIZE (₹)" class="w-full">
+                    <input type="text" id="m-entry" placeholder="ENTRY (₹)" class="w-full">
+                </div>
+                <input type="number" id="m-slots" placeholder="TOTAL SLOTS" class="w-full">
+                <input type="datetime-local" id="m-time" class="w-full">
+                <button onclick="publishMatch()" class="btn-action w-full py-5 rounded-2xl uppercase font-black text-xs">Launch Tournament</button>
+            </div>
+        </div>
+
+        <!-- LIVE -->
+        <div id="tab-live" class="hidden space-y-4">
+            <div id="admin-match-list" class="space-y-4"></div>
+        </div>
+
+        <!-- CORE -->
+        <div id="tab-core" class="hidden space-y-4">
+            <div class="glass p-6 space-y-4">
+                <input type="email" id="upd-email" placeholder="ADMIN EMAIL" class="w-full">
+                <input type="password" id="upd-pass" placeholder="PASSWORD" class="w-full">
+                <input type="password" id="upd-key" placeholder="SECRET KEY" class="w-full">
+                <button onclick="updateSecurity()" class="btn-action w-full py-4 rounded-xl uppercase text-xs">Save Credentials</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ENROLL MODAL -->
+    <div id="enroll-modal" class="fixed inset-0 z-[300] hidden bg-black/95 backdrop-blur-3xl overflow-y-auto p-6">
+        <div class="max-w-lg mx-auto py-10">
+            <div class="flex justify-between items-center mb-8">
+                <h3 class="text-2xl font-black uppercase italic tracking-tighter">Register <span class="text-[#00ff88]">Battle</span></h3>
+                <button onclick="closeEnroll()" class="text-gray-500"><i data-lucide="x-circle" class="w-8 h-8"></i></button>
+            </div>
+
+            <div class="glass p-6 mb-8 bg-[#00ff88]/5 border-[#00ff88]/20">
+                <p class="text-[#00ff88] font-black text-[10px] uppercase tracking-widest mb-2">Instructions</p>
+                <p class="text-xs text-gray-400">1. Fill details. 2. Pay to <span class="text-white font-bold">ffmaxpro@ybl</span>. 3. Send screenshot via WhatsApp from Support section.</p>
+            </div>
+
+            <form id="reg-form" class="space-y-5">
+                <input type="hidden" id="reg-m-id">
+                <input type="hidden" id="reg-m-title">
+                <input type="text" id="p-name" required placeholder="IN-GAME NAME" class="w-full">
+                <input type="number" id="p-uid" required placeholder="FF UID" class="w-full">
+                <input type="number" id="p-phone" required placeholder="WHATSAPP NUMBER" class="w-full">
+                <button type="submit" class="btn-action w-full py-5 rounded-2xl uppercase font-black tracking-widest mt-4">Join Now</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ROOM MODAL -->
+    <div id="room-modal" class="fixed inset-0 z-[400] hidden bg-black/95 flex items-center justify-center p-8">
+        <div class="w-full max-w-sm glass p-8 text-center border-[#00ff88]/30">
+            <h3 class="text-lg font-black uppercase text-[#00ff88] mb-6 tracking-widest">Share Room</h3>
+            <div class="space-y-4 mb-8">
+                <input type="text" id="room-id" placeholder="ROOM ID" class="w-full text-center">
+                <input type="text" id="room-pass" placeholder="PASSWORD" class="w-full text-center">
+            </div>
+            <button onclick="sendRoomDetails()" class="btn-action w-full py-4 rounded-xl uppercase text-xs">Broadcast</button>
+            <button onclick="closeRoomModal()" class="mt-4 text-gray-600 text-[10px] font-black uppercase">Cancel</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getDatabase, ref, set, push, onValue, remove, get, update } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
+
+        const config = {
+            apiKey: "AIzaSyClX7pRJyFwpLWdTKHfe_SG33hJ_dtlPrc",
+            authDomain: "ffmaxhub-9030b.firebaseapp.com",
+            databaseURL: "https://ffmaxhub-9030b-default-rtdb.firebaseio.com",
+            projectId: "ffmaxhub-9030b",
+            storageBucket: "ffmaxhub-9030b.firebasestorage.app",
+            messagingSenderId: "569563426180",
+            appId: "1:569563426180:web:fd6c1383259b49c62941d1"
+        };
+
+        const app = initializeApp(config);
+        const auth = getAuth(app);
+        const db = getDatabase(app);
+        
+        let sys = { email: 'admin@99.pro', pass: 'admin123', key: 'ELITE' };
+        const MASTER = "ELITE99";
+        let loop;
+
+        (async () => {
+            await signInAnonymously(auth);
+            const snap = await get(ref(db, 'sys_cfg'));
+            if(snap.exists()) sys = snap.val();
+            sync();
+        })();
+
+        // UTILS
+        window.msg = (m) => { const t = document.getElementById('toast'); t.innerText = m; t.style.display = 'block'; setTimeout(()=>t.style.display='none', 3000); };
+        window.toggleHide = (id) => { const el = document.getElementById(id); el.type = el.type === 'password' ? 'text' : 'password'; };
+        window.nav = (id) => {
+            document.querySelectorAll('.section-view').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('view-'+id).classList.add('active');
+            document.getElementById('n-'+id).classList.add('active');
+            lucide.createIcons();
+        };
+
+        // ADMIN FLOW
+        window.toggleGate = () => { document.getElementById('gate-overlay').classList.toggle('hidden'); gateS(1); };
+        window.gateS = (s) => { [1,2,3].forEach(i => document.getElementById('gate-s'+i).classList.toggle('hidden', i!==s)); };
+        
+        window.checkSecret = () => {
+            if(document.getElementById('s-key').value === sys.key) {
+                gateS(2);
+                document.getElementById('s-key').value = ''; 
+            } else msg("Incorrect Secret Key");
+        };
+
+        window.checkLogin = () => {
+            const e = document.getElementById('adm-email').value;
+            const p = document.getElementById('adm-pass').value;
+            if(e === sys.email && p === sys.pass) { 
+                toggleGate(); 
+                openAdmin();
+                document.getElementById('adm-email').value = ''; 
+                document.getElementById('adm-pass').value = '';
+            } else msg("Invalid Admin Login");
+        };
+
+        window.masterReset = async () => {
+            if(document.getElementById('master-code').value === MASTER) {
+                const def = { email: 'admin@ffmax.pro', pass: 'admin123', key: 'ELITE' };
+                await set(ref(db, 'sys_cfg'), def);
+                sys = def;
+                msg("System Reset to Default");
+                toggleGate();
+                document.getElementById('master-code').value = '';
+            } else msg("Invalid Master Code");
+        };
+
+        window.updateSecurity = async () => {
+            const e = document.getElementById('upd-email').value;
+            const p = document.getElementById('upd-pass').value;
+            const k = document.getElementById('upd-key').value;
+            if(!e || !p || !k) return msg("Fill all fields");
+            const dat = { email: e, pass: p, key: k };
+            await set(ref(db, 'sys_cfg'), dat);
+            sys = dat;
+            msg("Credentials Updated");
+            document.getElementById('upd-email').value = ''; document.getElementById('upd-pass').value = ''; document.getElementById('upd-key').value = '';
+        };
+
+        // SYNC DATA
+        function sync() {
+            onValue(ref(db, 'arena'), (snap) => {
+                const data = snap.val();
+                const main = document.getElementById('match-list');
+                const adm = document.getElementById('admin-match-list');
+                main.innerHTML = ''; adm.innerHTML = '';
+
+                if(!data) {
+                    main.innerHTML = `<p class="py-20 text-center text-gray-700 font-bold uppercase text-xs">Arena is Empty</p>`;
+                    return;
+                }
+
+                Object.keys(data).forEach(id => {
+                    const m = data[id];
+                    const now = new Date().getTime();
+                    const target = new Date(m.time).getTime();
+
+                    // AUTO REMOVE EXPIRED
+                    if(now > target + 600000) { 
+                        remove(ref(db, `arena/${id}`));
+                        return;
+                    }
+
+                    const left = m.slots - (m.joined || 0);
+                    const dt = new Date(m.time).toLocaleString('en-IN', { hour:'2-digit', minute:'2-digit', day:'numeric', month:'short' });
+
+                    main.innerHTML += `
+                        <div class="glass p-6 relative border-t-2 border-[#00ff88]/20">
+                            <div class="flex justify-between items-start mb-6">
+                                <div>
+                                    <h3 class="text-xl font-black uppercase italic tracking-tighter">${m.name}</h3>
+                                    <p class="text-[9px] text-gray-500 font-bold uppercase tracking-widest mt-1">${dt} • ${m.map}</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-[#00ff88] text-[10px] font-black timer" data-time="${m.time}">--:--:--</p>
+                                    <p class="text-[8px] text-gray-500 font-black mt-1">${m.mode}</p>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-3 gap-4 mb-6">
+                                <div class="bg-white/5 p-3 rounded-2xl text-center">
+                                    <p class="text-[8px] text-gray-500 font-black">PRIZE</p>
+                                    <p class="text-sm font-black">₹${m.prize}</p>
+                                </div>
+                                <div class="bg-white/5 p-3 rounded-2xl text-center">
+                                    <p class="text-[8px] text-gray-500 font-black">ENTRY</p>
+                                    <p class="text-sm font-black">₹${m.entry}</p>
+                                </div>
+                                <div class="bg-white/5 p-3 rounded-2xl text-center">
+                                    <p class="text-[8px] text-gray-500 font-black">SLOTS</p>
+                                    <p class="text-sm font-black ${left < 5 ? 'text-red-500' : 'text-[#00ff88]'}">${left}/${m.slots}</p>
+                                </div>
+                            </div>
+                            <button onclick="openEnroll('${id}', '${m.name}')" class="btn-action w-full py-4 rounded-2xl uppercase tracking-widest text-[10px] ${left <= 0 ? 'opacity-30 pointer-events-none' : ''}">
+                                ${left <= 0 ? 'Full' : 'Join'}
+                            </button>
+                        </div>`;
+
+                    adm.innerHTML += `
+                        <div class="glass p-4 flex justify-between items-center">
+                            <div class="truncate max-w-[150px]">
+                                <p class="text-xs font-black uppercase truncate">${m.name}</p>
+                                <p class="text-[9px] text-gray-500">${m.joined || 0}/${m.slots} Joined</p>
+                            </div>
+                            <div class="flex gap-2">
+                                <button onclick="openRoomModal('${id}', '${m.name}')" class="w-9 h-9 glass flex items-center justify-center text-[#00ff88]"><i data-lucide="send" class="w-4 h-4"></i></button>
+                                <button onclick="extendMatch('${id}', '${m.time}')" class="w-9 h-9 glass flex items-center justify-center text-blue-500"><i data-lucide="plus" class="w-4 h-4"></i></button>
+                                <button onclick="deleteMatch('${id}')" class="w-9 h-9 glass flex items-center justify-center text-red-500"><i data-lucide="trash" class="w-4 h-4"></i></button>
+                            </div>
+                        </div>`;
+                });
+
+                lucide.createIcons();
+                if(loop) clearInterval(loop);
+                loop = setInterval(tick, 1000);
+            });
+        }
+
+        function tick() {
+            document.querySelectorAll('.timer').forEach(el => {
+                const target = new Date(el.dataset.time).getTime();
+                const diff = target - new Date().getTime();
+                if(diff <= 0) { el.innerText = "LIVE"; el.classList.add('animate-pulse'); }
+                else {
+                    const h = Math.floor(diff/3600000);
+                    const m = Math.floor((diff%3600000)/60000);
+                    const s = Math.floor((diff%60000)/1000);
+                    el.innerText = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+                }
+            });
+        }
+
+        // ACTIONS
+        window.publishMatch = async () => {
+            const dat = {
+                name: document.getElementById('m-name').value,
+                map: document.getElementById('m-map').value,
+                mode: document.getElementById('m-mode').value,
+                prize: document.getElementById('m-prize').value,
+                entry: document.getElementById('m-entry').value,
+                slots: parseInt(document.getElementById('m-slots').value),
+                time: document.getElementById('m-time').value,
+                joined: 0
+            };
+            if(!dat.name || !dat.time || !dat.slots) return msg("Missing Fields");
+            await push(ref(db, 'arena'), dat);
+            msg("Published!");
+            document.getElementById('m-name').value = '';
+            document.getElementById('m-prize').value = '';
+            document.getElementById('m-entry').value = '';
+            document.getElementById('m-slots').value = '';
+            document.getElementById('m-time').value = '';
+            setTab('live');
+        };
+
+        window.deleteMatch = async (id) => { 
+            if(confirm("Delete this match?")) {
+                await remove(ref(db, `arena/${id}`));
+                msg("Deleted!");
+            }
+        };
+
+        window.extendMatch = async (id, cur) => {
+            const next = new Date(new Date(cur).getTime() + 1800000).toISOString();
+            await update(ref(db, `arena/${id}`), { time: next });
+            msg("Extended +30M");
+        };
+
+        window.openAdmin = () => document.getElementById('admin-panel').classList.remove('hidden');
+        window.closeAdmin = () => document.getElementById('admin-panel').classList.add('hidden');
+        window.setTab = (t) => {
+            ['create','live','core'].forEach(x => {
+                document.getElementById('tab-'+x).classList.toggle('hidden', x!==t);
+                document.getElementById('bt-'+x).classList.toggle('bg-[#00ff88]', x===t);
+                document.getElementById('bt-'+x).classList.toggle('text-black', x===t);
+            });
+        };
+
+        // ENROLL
+        window.openEnroll = (id, name) => { 
+            document.getElementById('reg-m-id').value = id; 
+            document.getElementById('reg-m-title').value = name; 
+            document.getElementById('enroll-modal').classList.remove('hidden'); 
+        };
+        window.closeEnroll = () => document.getElementById('enroll-modal').classList.add('hidden');
+
+        document.getElementById('reg-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const mid = document.getElementById('reg-m-id').value;
+            const snap = await get(ref(db, `arena/${mid}`));
+            if(snap.exists()) {
+                const cur = snap.val().joined || 0;
+                await update(ref(db, `arena/${mid}`), { joined: cur + 1 });
+                msg("Success! Submit Proof.");
+                e.target.reset();
+                closeEnroll();
+                nav('help');
+            }
+        };
+
+        window.openRoomModal = (id, name) => {
+            document.getElementById('room-modal').classList.remove('hidden');
+            window.activeRoomId = id; window.activeRoomName = name;
+        };
+        window.closeRoomModal = () => document.getElementById('room-modal').classList.add('hidden');
+        window.sendRoomDetails = () => {
+            const rid = document.getElementById('room-id').value;
+            const rps = document.getElementById('room-pass').value;
+            const body = encodeURIComponent(`FFPRO MAX\nMatch: ${window.activeRoomName}\nID: ${rid}\nPass: ${rps}`);
+            window.open(`https://wa.me/?text=${body}`);
+            document.getElementById('room-id').value = ''; document.getElementById('room-pass').value = '';
+            closeRoomModal();
+        };
+
+        lucide.createIcons();
+    </script>
+</body>
+</html>
